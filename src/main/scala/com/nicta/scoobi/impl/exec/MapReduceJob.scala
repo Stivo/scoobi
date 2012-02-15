@@ -220,17 +220,20 @@ class MapReduceJob(stepId: Int) {
 
     /* Run job */
     jar.close()
-    job.submit()
-
-    val map = new Progress(job.mapProgress())
-    val reduce = new Progress(job.reduceProgress())
-
-    while (!job.isComplete()) {
-      Thread.sleep(5000)
-      if (map.hasProgressed() || reduce.hasProgressed())
-        logger.info("Map " + map.getProgress().formatted("%3d") + "%    " +
-                    "Reduce " + reduce.getProgress().formatted("%3d") + "%")
-    }
+    
+    job.waitForCompletion(true)
+    
+//    job.submit()
+//
+//    val map = new Progress(job.mapProgress())
+//    val reduce = new Progress(job.reduceProgress())
+//
+//    while (!job.isComplete()) {
+//      Thread.sleep(5000)
+//      if (map.hasProgressed() || reduce.hasProgressed())
+//        logger.info("Map " + map.getProgress().formatted("%3d") + "%    " +
+//                    "Reduce " + reduce.getProgress().formatted("%3d") + "%")
+//    }
 
     /* Tidy-up */
     tmpFile.delete
